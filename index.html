@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex; /* Use flexbox for horizontal layout */
+            flex-wrap: wrap; /* Allow items to wrap onto the next line */
+            gap: 10px; /* Space between the number blocks */
+            margin: 20px;
+        }
+        .number-block {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for each number */
+            grid-template-rows: repeat(7, 1fr); /* 7 rows for each number */
+            border: 1px solid black; /* Border around each number block */
+            width: 250px; /* Fixed width to maintain aspect ratio */
+            height: 350px; /* Fixed height for number blocks */
+        }
+        .cell {
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+        .active {
+            background-color: blue;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 800px) {
+            .number-block {
+                width: 200px; /* Smaller width for medium screens */
+                height: 280px; /* Smaller height for medium screens */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .number-block {
+                width: 150px; /* Even smaller width for small screens */
+                height: 210px; /* Even smaller height for small screens */
+            }
+            .cell {
+                font-size: 20px; /* Reduce font size on small screens */
+            }
+        }
+    </style>
+</head>
+<body onload="displayNumbers()">
+    <div class="container"></div>
+    <script>
+        var megaNums = [
+            [14, 17, 17, 17, 17, 17, 14], // 0
+            [4, 12, 4, 4, 4, 4, 14],     // 1
+            [14, 17, 1, 6, 8, 16, 31],    // 2
+            [14, 17, 1, 6, 1, 17, 14],    // 3
+            [2, 6, 10, 18, 31, 2, 2],     // 4
+            [31, 16, 16, 30, 1, 17, 14],   // 5
+            [14, 17, 16, 30, 17, 17, 14],   // 6
+            [31, 1, 2, 4, 4, 4, 4],        // 7
+            [14, 17, 17, 14, 17, 17, 14],   // 8
+            [14, 17, 17, 15, 1, 17, 14]    // 9
+        ];
+
+        function displayNumbers() {
+            var numbersContainer = document.querySelector('.container');
+            numbersContainer.innerHTML = ""; // Clear previous content
+
+            // Loop through numbers 0-9
+            for (let number = 0; number < megaNums.length; number++) {
+                const numberBlock = document.createElement('div');
+                numberBlock.classList.add('number-block'); // Create a block for each number
+
+                // Convert the current number to binary and prepare the matrix
+                var binary = megaNums[number].map(num => num.toString(2).padStart(5, '0')); // Convert to binary with padding
+
+                // Create a 7x5 grid for the current number
+                for (let i = 0; i < 7; i++) {
+                    for (let j = 0; j < 5; j++) {
+                        const cell = document.createElement('div');
+                        cell.classList.add('cell');
+
+                        // Check if the current cell should be active based on the binary string
+                        if (binary[i][j] === '1') {
+                            cell.classList.add('active');
+                        }
+
+                        cell.textContent = binary[i][j]; // Display the binary number
+                        numberBlock.appendChild(cell); // Add cell to the number block
+                    }
+                }
+                numbersContainer.appendChild(numberBlock); // Add the number block to the main container
+            }
+        }
+    </script>
+</body>
+</html>
